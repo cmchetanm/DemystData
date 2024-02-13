@@ -1,0 +1,22 @@
+{
+  "name": "demystdata",
+  "version": "1.0.0",
+  "bin": {
+    "todo-solution-1": "solution1.js",
+    "todo-solution-2": "solution2.js"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
