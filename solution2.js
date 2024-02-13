@@ -1,16 +1,10 @@
 #!/usr/bin/env node
 
 const https = require("https");
-const { program } = require("commander");
+const {cliCommand} = require("./cli")
+const {errorHandler} = require("./errorHandler")
 
-program
-  .command("list")
-  .description("Gives list of first 20 even numbered todos")
-  .action(() => {
-    makeOneApiRequest();
-  });
-
-program.parse();
+cliCommand(["list", 'Gives list of first 20 even numbered todos', makeOneApiRequest])
 
 async function makeOneApiRequest() {
   const maxTries = 3;
@@ -41,17 +35,8 @@ async function makeOneApiRequest() {
       console.log(result);
       break;
     } catch (error) {
-      attempts++;
-      if (attempts <= maxTries) {
-        console.log(
-          `Request failed with error: ${error.message}. Retrying after 1 second... Attempt ${attempts}`
-        );
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } else {
-        console.log(
-          `Maximum number of retries reached. Error making request to the server: ${error.message}`
-        );
-      }
+      attempts++
+      await errorHandler(attempts, maxTries, error)
     }
   }
 }

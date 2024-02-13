@@ -1,16 +1,10 @@
 #!/usr/bin/env node
 
 const https = require("https");
-const { program } = require("commander");
+const {cliCommand} = require("./cli");
+const { errorHandler } = require("./errorHandler");
 
-program
-  .command("list")
-  .description("Gives list of first 20 even numbered todos")
-  .action(() => {
-    makeMultipleApiRequests();
-  });
-
-program.parse();
+cliCommand(['list', 'Gives list of first 20 even numbered todos', makeMultipleApiRequests])
 
 async function makeMultipleApiRequests() {
   const baseUrl = "https://jsonplaceholder.typicode.com/todos/";
@@ -46,17 +40,8 @@ async function makeMultipleApiRequests() {
       console.log(result);
       break;
     } catch (error) {
-      attempts++;
-      if (attempts <= maxTries) {
-        console.log(
-          `Request failed with error: ${error.message}. Retrying after 1 second... Attempt ${attempts}`
-        );
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } else {
-        console.log(
-          `Maximum number of retries reached. Error making request to the server: ${error.message}`
-        );
-      }
+      attempts++
+      await errorHandler(attempts, maxTries, error)
     }
   }
 }
